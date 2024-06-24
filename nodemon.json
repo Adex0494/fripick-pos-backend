@@ -1,0 +1,7 @@
+{
+    "env": {
+        "DB_USER": "adex",
+        "DB_PASSWORD": "MongoBond007",
+        "DB_NAME": "fripick-pos-backend"
+    }
+}

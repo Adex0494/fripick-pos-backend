@@ -1,5 +1,10 @@
 const express = require('express')
 
+const MongoClient = require('mongodb').MongoClient;
+
+const url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.tzkfkuv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`
+
+
 const router = express.Router()
 
 const companies = [
@@ -109,7 +114,20 @@ const companies = [
     }
   ]
 
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
+    const client = new MongoClient(url);
+
+    let companies
+
+    try{
+        await client.connect();
+        const db = client.db();
+        companies = await db.collection('companies').find().toArray();
+    } catch (error) {
+        console.log(error)
+        return res.json({message: 'Could not retrieve companies.'});
+    };
+    client.close()
    res.json(companies)
 })
 
